@@ -42,7 +42,11 @@ Expected Result Shape: A string representing the full name of the president that
 console.log('Problem 1:')
 
 // Add your code below this line
+const Whig = presidents.find(president => {
+  return president.party === 'Whig'
+})
 
+console.log(Whig.president)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -65,7 +69,11 @@ Expected Result Shape: An array of objects (with each object representing a pres
 console.log('Problem 2:')
 
 // Add your code below this line
+const presidentsNamedJames = presidents.filter(president => {
+  return president.president.includes('James')
+})
 
+console.log(presidentsNamedJames)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -92,7 +100,11 @@ Tip: your new array should contain 45 elements
 console.log('Problem 3:')
 
 // Add your code below this line
+const presidentialParties = presidents.map(president => {
+  return president.party
+})
 
+console.log(presidentialParties)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -114,7 +126,12 @@ Expected Result Shape: An array of objects (with each object representing a pres
 console.log('Problem 4:')
 
 // Add your code below this line
+const presidentsBetween1850and1900 = presidents.filter(president => {
+  const yearOfOffice = president.took_office.split("-")[0]
+  return yearOfOffice >= 1850 && yearOfOffice <= 1900
+})
 
+console.log(presidentsBetween1850and1900)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -137,7 +154,11 @@ Expected Result Shape: An array of objects (with each object representing a pres
 console.log('Problem 5:')
 
 // Add your code below this line
+const livingPresidents = presidents.filter(president => {
+  return president.death_year === null
+})
 
+console.log(livingPresidents)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -160,7 +181,11 @@ Expected Result Shape: A string representing the full name of the president that
 console.log('Problem 6:')
 
 // Add your code below this line
+const firstRepublican = presidents.find(president => {
+  return president.party === 'Republican'
+}).president
 
+console.log(firstRepublican)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -183,7 +208,46 @@ Expected Result Shape: An array of objects (with each object representing a pres
 console.log('Problem 7:')
 
 // Add your code below this line
+// console.log(presidents[44])
 
+// creating function to address null value for trump's left_office date
+// really brittle -- works until he leaves office
+// but sufficient for the array we've been given
+// and i find it more interesting than hardcoding
+function leftOfficeDateChanger(array) {
+  for (i = 0; i < array.length; i++) {
+    if (array[i].left_office === null) {
+      array[i].left_office = new Date().toISOString().slice(0,10)
+    }
+  }
+  return array
+}
+
+// setting new presidents array for this problem
+const presidentz = leftOfficeDateChanger(presidents)
+// validating that the function works
+console.log(presidentz[44])
+console.log('')
+
+// changing presidential start and departure dates to dates
+// then subtracting those two dates together
+// and comparing if its more than the miliseconds in 4 years
+const shortTermPresidents = presidents.filter(president => {
+
+  // converting string values to dates
+  const startDateParts = president.took_office.split('-')
+  const startDate = new Date(startDateParts[0], startDateParts[1] - 1, startDateParts[2])
+  const leftDateParts = president.left_office.split('-')
+  const leftDate = new Date(leftDateParts[0], leftDateParts[1] - 1, leftDateParts[2])
+
+  // subtracting dates to less than 4 yrs
+  // value comes from 4 years + 1 leap day
+  // (1000*60*60*24*365*4) + (1000*60*60*24)
+  return Math.abs(leftDate - startDate) < 126230400000
+
+})
+
+console.log(shortTermPresidents)
 // Add your code above this line
 
 /** added for formatting purposes **/
@@ -210,9 +274,27 @@ Example (not the actual answer):
 console.log('Problem 8:')
 
 // Add your code below this line
+const firstNames = presidents.map(president => {
+  return president.president.split(' ')[0]
+})
 
+// creating counter
+const nameCounter = (array) => {
+  let nameCountArray = []
 
+  for (let i = 0; i < array.length; i++) {
+    let firstName = array[i]
+    if (nameCountArray[firstName] === undefined) {
+      nameCountArray[firstName] = 1
+    } else {
+      nameCountArray[firstName] += 1
+    }
+  }
+  return nameCountArray
+}
 
+let firstNameCount = nameCounter(firstNames)
+console.log(firstNameCount)
 // Add your code above this line
 
 /** added for formatting purposes **/
